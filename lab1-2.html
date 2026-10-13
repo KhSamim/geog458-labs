@@ -45,9 +45,20 @@
             mymap.setConfigProperty('basemap','font','Roboto');
         });
 
+        //Property 1: ShowTransitLabels
+        // I set showTransitLabels to false to hide transit icons and text labels on the map. 
+        // This reduces visual clutter and helps the viewer focus on the University of Washington 
+        // campus instead of transportation information. This is useful when making a campus map 
+        // where transit information is not the main focus.
+
         // Adds a button that lets users expand the map to fullscreen.
         mymap.addControl(new mapboxgl.FullscreenControl());
 
+        //Property 3: Font
+        // I set the font property to Open Sans to change the font used for map labels.
+        //  I chose this setting because a consistent and readable font can make the map easier to understand. 
+        // This would be useful for a campus map where viewers need to identify places and read labels clearly.
+        
         // Adds zoom buttons and a compass for navigating the map.
         mymap.addControl(new mapboxgl.NavigationControl());
 
