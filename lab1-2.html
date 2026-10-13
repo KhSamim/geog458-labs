@@ -17,19 +17,40 @@
       mapboxgl.accessToken = 'pk.eyJ1Ijoic2FtaW1qYW4iLCJhIjoiY211enZrejh5MDAxMjJ3cHlrcHp4dWtjNCJ9.nwHMRm59fzQVz6ABY9paEw';
       const mymap = new mapboxgl.Map({
              container: 'map',
-             style: 'mapbox://styles/mapbox/satellite-v9',
-             projection: 'equalEarth', //Display the map as a globe since satellite-v9 defaults to Mercator
+             style: 'mapbox://styles/mapbox/standard-satellite',
+             projection: 'albers', //Display the map as a globe since satellite-v9 defaults to Mercator
              //I changed these coordinates to the latitude and longitude of UW seattle so it shows UW Seattle
              center: [-122.3035, 47.6553],
              //I think zooming it to 15 shows UW seattle clear enough
-             zoom:15
+             zoom:15,
           });
-         
-    mymap.addControl(new mapboxgl.FullscreenControl());
-    mymap.addControl(new mapboxgl.NavigationControl());
 
+        
+        mymap.on('style.load', () => {
 
-// code from the next step will go here!
+            // PROPERTY 1: Changes the map lighting to dawn.
+            // Useful for creating any atmosphere and visual contrast you want.
+            mymap.setConfigProperty('basemap', 'lightPreset', 'dawn');
+
+            // Hides points of interest, like businesses and attraction labels.
+            // This reduces clutter and helps the viewer focus on the campus.
+            mymap.setConfigProperty('basemap','showPointOfInterestLabels',false);
+
+            // PROPERTY 2: Hides transit icons and text labels.
+            // Useful because transit information is not the main focus of the map.
+            mymap.setConfigProperty('basemap','showTransitLabels',false );
+
+            // PROPERTY 3: Changes the map label font to Open Sans.
+            // Useful for creating a readable style for place labels.
+            mymap.setConfigProperty('basemap','font','Roboto');
+        });
+
+        // Adds a button that lets users expand the map to fullscreen.
+        mymap.addControl(new mapboxgl.FullscreenControl());
+
+        // Adds zoom buttons and a compass for navigating the map.
+        mymap.addControl(new mapboxgl.NavigationControl());
+
 </script>
 </body>
 </html>
