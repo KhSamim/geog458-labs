@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Mapping World Cities</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.js"></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+
+         /* Layout of the legend panel. */
+        #legend {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 140px;
+            background: #fff;
+            margin-right: 20px;
+            margin-bottom: 40px;
+            padding: 10px 20px 10px 10px;
+            border-radius: 3px;
+            text-align: center;
+        }
+
+        /* Each row for a magnitude value. */
+        .break {
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* The circular symbol. */
+        .dot {
+            display: inline-block;
+            margin-top: 5px;
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+
+        /* Label next to the symbol. */
+        .dot-label {
+            font-style: italic;
+        }
+
+        /* Link color within the legend. */
+        #legend a {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="legend"></div>
+    <script>    
+        const legend = document.getElementById('legend');
+        const grades = [15000, 100000, 1000000, 5000000, 15000000];
+        const radii = [3, 5, 9, 15, 20];
+        const colors = ['#fff7ec', '#fdd49e', '#fc8d59', '#fc8d59', '#000000'];
+        const labels = ['<strong>Population</strong>'];
+
+        for (let i = 0; i < grades.length; i++) {
+            const value = grades[i];
+            const diameter = 2 * radii[i];
+
+            labels.push(
+                '<p class="break"><i class="dot" style="background:' + colors[i] +
+                '; width:' + diameter + 'px; height:' + diameter +
+                'px;"></i> <span class="dot-label" style="top:' +
+                diameter / 2 + 'px;">' + value + '</span></p>'
+            );
+        }
+
+        const source =
+            '<p style="text-align:right; font-size:10pt;">Source: ' +
+            '<a href="https://earthquake.usgs.gov/earthquakes/">USGS</a></p>';
+
+        legend.innerHTML = labels.join('') + source;
+    </script>
+    
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1Ijoic2FtaW1qYW4iLCJhIjoiY211enZrejh5MDAxMjJ3cHlrcHp4dWtjNCJ9.nwHMRm59fzQVz6ABY9paEw';
+        const mymap = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/satellite-v9',
+            projection: 'globe',
+            center: [-96, 37.8],
+            zoom: 1
+        });
+
+        mymap.on('style.load', () => {
+            mymap.setFog({});
+        });
+
+        //loaded the map and added a source and layer for the population of world cities
+        mymap.on('load', () => {
+            mymap.addSource('population', {
+                type: 'geojson',
+                data: 'data/world-cities.geojson'
+            });
+            
+            // Add a layer showing the population of the cities.
+            // The radius and color of the circle are based on the population value.
+            // smaller population values will have smaller circles and lighter colors, 
+            // while larger population values will have larger circles and darker colors.
+            // base map is light-v11 style and the projection is globe. 
+            // so its easier to see the population of the cities on the map.
+            mymap.addLayer({
+                id: 'cities-layer',
+                type: 'circle',
+                source: 'population',
+                paint: {
+                    // Make the circle radius larger as population increases.
+                    'circle-radius': [
+                        'interpolate',
+                        ['linear'],
+                        ['get', 'population'],
+                        15000, 3,
+                        100000, 5,
+                        1000000, 9,
+                        5000000, 15,
+                        15000000, 20
+                    ],
+                     // Change the circle color as population increases.
+                    'circle-color': [
+                        'interpolate', ['linear'],
+                        ['to-number', ['get', 'population'], 0],
+                        15000, '#fff7ec',
+                        100000, '#fdd49e',
+                        1000000, '#fc8d59',
+                        5000000, '#fc8d59',
+                        15000000, '#000000'
+                    ],
+                    'circle-stroke-color': 'white'
+                }
+                
+            });
+
+            // Click a city circle to view its population.
+            mymap.on('click', 'cities-layer', (event) => {
+                const feature = event.features[0];
+                const coordinates = feature.geometry.coordinates.slice(0, 2);
+
+                new mapboxgl.Popup()
+                    .setLngLat(coordinates)
+                    .setHTML(`<strong>population:</strong> ${feature.properties.population}`)
+                    .addTo(mymap);
+            });
+            
+        });
+
+        
+
+    </script>
+</body>
+</html>
