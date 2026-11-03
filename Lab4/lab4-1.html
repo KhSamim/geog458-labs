@@ -17,8 +17,7 @@
     mapboxgl.accessToken = 'pk.eyJ1Ijoic2FtaW1qYW4iLCJhIjoiY211enZrejh5MDAxMjJ3cHlrcHp4dWtjNCJ9.nwHMRm59fzQVz6ABY9paEw';
     const map = new mapboxgl.Map({
       container: 'map',
-      style: 'mapbox://styles/mapbox/dark-v11',
-      projection: 'globe',
+      style: 'mapbox://styles/mapbox/outdoors-v12',
       center: [-79.999732, 40.4374],
       zoom: 11,
       maxZoom: 15
@@ -48,18 +47,19 @@
                 'stops': [[1, 0], [62, 1]]
                 },
                 'heatmap-intensity': {
-                'stops': [[11, 1], [15, 3]]
+                'stops': [[11, 1.5], [15, 3.5]]
                 },
                 'heatmap-color': [
-                "interpolate", ["linear"], ["heatmap-density"],
-                0, "rgba(236,222,239,0)",
-                0.2, "rgb(208,209,230)",
-                0.4, "rgb(166,189,219)",
-                0.6, "rgb(103,169,207)",
-                0.8, "rgb(28,144,153)"
+                  "interpolate", ["linear"], ["heatmap-density"],
+                  0, 'rgba(255,255,178,0)',
+                  0.2, 'rgb(255,255,178)',
+                  0.4, 'rgb(254,204,92)',
+                  0.6, 'rgb(253,141,60)',
+                  0.8, 'rgb(240,59,32)',
+                  1, 'rgb(189,0,38)'
                 ],
                 'heatmap-radius': {
-                'stops': [[11, 15], [15, 20]]
+                'stops': [[11, 10], [15, 16]]
                 },
                 'heatmap-opacity': {
                 'default': 1,
