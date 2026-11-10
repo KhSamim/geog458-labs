@@ -1,0 +1,7 @@
+Millions of Data, Flow Map
+1. Study Area and Dates
+I chose the Seattle and Puget Sound area because I wanted to see how vessel traffic looked around July 4 and whether there was more activity during the evening when people might be watching fireworks. I used AccessAIS from MarineCadastre.gov to get the AIS data. The dataset covers July 5, 2025, from 00:00 to 23:59 UTC, which is July 4 at 5:00 PM through July 5 at 4:59 PM in Seattle (PDT). 
+2. Interpretation
+The map shows vessel movement throughout the selected time period, allowing me to compare routes and activity between passenger, cargo, tanker, and other vessels. I was especially interested in seeing whether vessel activity changed during the evening of July 4. The different vessel categories help show how different types of ships move through the Seattle area. I will use specific routes and patterns visible in my map to describe what happened, rather than assuming why vessels were in those locations.
+3. Proposed Feature
+One feature I would add is a comparison tool that lets users compare vessel traffic on July 4 with traffic on a regular day. A user, such as someone planning a waterfront event, could use it to see whether certain areas become busier during fireworks or other events. I reviewed the NOAA AccessAIS Help Guide, which explains how users can select an area and time period to download AIS data. This feature would make it easier to compare vessel activity across different dates.
